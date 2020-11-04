@@ -1,0 +1,78 @@
+# Copyright 2019 F5 Networks All rights reserved.
+#
+# Version 3.8.0
+
+imports:
+- path: f5-existing-stack-same-net-cluster-payg-3nic-bigip.py
+resources:
+- name: same-net-cluster-3nic-setup
+  type: f5-existing-stack-same-net-cluster-payg-3nic-bigip.py
+  properties:
+   ### Enter the Google Region in which you want to deploy BIG-IP, for example 'us-west1'.
+   region: us-east1
+   ### Enter the availability zone where you want to deploy the BIG-IP VE instance, for example 'us-west1-a'.
+   availabilityZone1: us-east1-b
+   ### Enter the availability zone where you want to deploy the BIG-IP VE instance, for example 'us-west1-b'.
+   availabilityZone2: us-east1-c
+   ### Specify the name of the network to use for management traffic, for example 'my-management-network'.
+   mgmtNetwork: emarte-demo-net-mgmt1
+   ### Specify the name of the subnet to use for management traffic, for example 'my-management-subnetwork'.
+   mgmtSubnet: emarte-demo-subnet-mgmt1
+   ### This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation separated by a space. For example, '10.0.11.0/24'.
+   restrictedSrcAddress: 0.0.0.0/0
+   ### Specify the Network name for BIG-IP application traffic, for example 'my-application-network'.
+   network1: emarte-demo-net-ext1
+   ### If using a shared VPC, specify the name of the host project to use for management traffic. Leave default value of None when not using shared VPC. **Note** template does not create firewall policy for shared VPC. Create policy on shared VPC within in host project to allow appropriate traffic.
+   network1SharedVpc: None
+   ### Specify the subnet of the Network that the BIG-IP should use for application traffic, for example 'my-application-subnetwork'.
+   subnet1: emarte-demo-subnet-ext1
+   ### Enter None if alias IP failover is not required. Enter the alias IP address(es) to be used for application traffic, including CIDR suffix. This address must belong to the subnet noted above in key 'subnet1'. A list of alias IPs can be provided, separated by a space. For example, 'IE 10.x.x.16/28 10.x.x.32/28'.
+   aliasIp: 'None'
+   ### Enter the number of forwarding rules to create, for example '1'.  All integers from 1 to the max quota for the forwarding rules resource type are allowed.
+   numberOfForwardingRules: 1
+   ### Specify the Network name for BIG-IP internal application traffic, for example 'my-internal-network'.
+   network2: emarte-demo-net-int1
+   ### Specify the name of the Subnet of the Network that BIG-IP should use for internal application traffic, for example 'my-internal-subnetwork'.
+   subnet2: emarte-demo-net-int1
+   ## Provision Public IP addresses for BIG-IP Network Interfaces. By default it is set to provision public IPs.
+   provisionPublicIP: 'yes'
+   ### BIG-IP image, valid choices include:
+   # f5-bigip-15-1-0-4-0-0-6-payg-best-10gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-best-1gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-best-200mbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-best-25mbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-best-5gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-better-10gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-better-1gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-better-200mbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-better-25mbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-better-5gbps-200618231635
+   # f5-bigip-15-1-0-4-0-0-6-payg-good-10gbps-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-good-1gbps-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-good-200mbps-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-good-25mbps-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-good-5gbps-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-hp-ltm-16vcpu-200618231522
+   # f5-bigip-15-1-0-4-0-0-6-payg-pve-ltm-200mbps-200618231128
+   # f5-bigip-15-1-0-4-0-0-6-payg-pve-ltm-25mbps-200618231128
+   imageName: f5-bigip-15-1-0-4-0-0-6-payg-best-1gbps-200618231635
+   ### Instance type assigned to BIG-IP, for example 'n1-standard-4'.
+   instanceType: n1-standard-8
+   ### (Optional) Enter the BIG-IP Management Port, the default is '443'.
+   mgmtGuiPort: 443
+   ## (Optional) List NTP servers separated by a space, for example 'pool.ntp.org'. The default is 'time.google.com'.
+  #  ntpServer: <server server>
+   ## (Optional) Enter the Olson timezone string from /usr/share/zoneinfo. The default is 'UTC'. See the TZ column here (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for legal values. For example, 'US/Eastern'.
+  #  timezone: <timezone>
+   ## Enter a comma-separated list of modules and provisioning level, for example 'ltm:nominal' or 'ltm:nominal,asm:nominal'.
+   bigIpModules: ltm:nominal
+   ### Enter the Google service account to use for autoscale API calls, for example 'username@projectname.iam.serviceaccount.com'.
+   serviceAccount: emarte-service@f5-gcs-4261-sales-na-finserv.iam.gserviceaccount.com
+   ### This deployment can send anonymous statistics to F5 to help us determine how to improve our solutions. If you enter **no** statistics are not sent.
+   allowUsageAnalytics: 'yes'
+   ### This deployment can provide F5 with high-level device use information to optimize development resources. If you select **no** the information is not sent.
+   allowPhoneHome: 'yes'
+   ### (Optional) Log setting, used to set log level on scripts used during deployment. Acceptable values are - error, warn, info, verbose, debug, silly. The default is 'info'.
+  #  logLevel: <level>
+   ### URL for the AS3 declaration JSON file to be deployed. If left at **default**, the recommended F5 WAF configuration will be applied. Enter **none** to deploy without a service configuration. For example, ' https://cdn.f5.com/product/cloudsolutions/declarations/sample_01.json '
+   declarationUrl: default
